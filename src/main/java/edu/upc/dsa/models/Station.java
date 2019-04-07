@@ -1,6 +1,7 @@
 package edu.upc.dsa.models;
 
 import edu.upc.dsa.util.RandomUtils;
+import org.apache.log4j.Logger;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -13,14 +14,22 @@ public class Station {
     double lat;
     double lon;
     String description;
+    final static Logger logger = Logger.getLogger(Station.class);
 
-    public Station(String name, double lat, double lon, String description) {
-        this.id = RandomUtils.getId();
+    public Station(String id, String name, double lat, double lon, String description) {
+        this.id = id;
         this.listBikes = new LinkedList<>();
         this.name = name;
         this.lat = lat;
         this.lon = lon;
         this.description = description;
+    }
+
+    public void addBike(Bike bike){
+
+        this.listBikes.add(bike);
+        logger.info("Bici añadida en la stación " + this.id);
+
     }
 
     public String getId() {

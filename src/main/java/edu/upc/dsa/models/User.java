@@ -13,8 +13,8 @@ public class User {
     String surname;
     String email;
 
-    public User(String name, String surname, String email) {
-        this.id = RandomUtils.getId();
+    public User(String id, String name, String surname, String email) {
+        this.id = id;
         this.listBikes = new LinkedList<>();
         this.name = name;
         this.surname = surname;

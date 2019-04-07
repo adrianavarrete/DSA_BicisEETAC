@@ -8,8 +8,8 @@ public class Bike {
     String model;
     double km;
 
-    public Bike(String model, double km) {
-        this.id = RandomUtils.getId();
+    public Bike(String id, String model, double km) {
+        this.id = id;
         this.model = model;
         this.km = km;
     }

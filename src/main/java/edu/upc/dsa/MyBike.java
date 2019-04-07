@@ -3,6 +3,7 @@ package edu.upc.dsa;
 import edu.upc.dsa.models.Bike;
 import edu.upc.dsa.models.Station;
 import edu.upc.dsa.models.User;
+import edu.upc.dsa.throwable.StationNotFoundException;
 
 import java.util.List;
 
@@ -10,9 +11,9 @@ public interface MyBike {
 
     public static final int numMaxStations = 15;
 
-    public void addUser(User user);
-    public void addStation(Station station);
-    public void addBike(Bike bike);
+    public void addUser(String name, String surname, String email);
+    public void addStation(String name, double lat, double lon, String description);
+    public void addBike(String model, double km, String idStation) throws StationNotFoundException;
     public List<Bike> bikesByStationOrderByKms(List<Bike> listBikes);
     public Bike getBike(String id);
     public List<Bike> bikesByUser(User user);
