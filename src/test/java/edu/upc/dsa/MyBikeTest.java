@@ -48,7 +48,7 @@ public class MyBikeTest {
     @Test
     public void addBikeTest() throws StationNotFoundException {
 
-        String id = MyBikeImpl.getInstance().getIdStation(1);
+        String id = MyBikeImpl.getInstance().getIdStation(0);
 
         MyBikeImpl.getInstance().addBike("prueba",23,id);
 

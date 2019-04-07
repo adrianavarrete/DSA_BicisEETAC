@@ -3,16 +3,19 @@ package edu.upc.dsa;
 import edu.upc.dsa.models.Bike;
 import edu.upc.dsa.models.Station;
 import edu.upc.dsa.models.User;
+import edu.upc.dsa.throwable.BikeNotFoundException;
 import edu.upc.dsa.throwable.StationNotFoundException;
 import edu.upc.dsa.util.RandomUtils;
 import org.apache.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.*;
 
 public class MyBikeImpl implements MyBike{
 
     private HashMap<String, User> users;
+    private HashMap<String, Bike> bikes;
     private Station[] stations;
     private int numstations;
     final static Logger logger = Logger.getLogger(MyBikeImpl.class);
@@ -30,6 +33,7 @@ public class MyBikeImpl implements MyBike{
 
     private MyBikeImpl (){
         this.users = new HashMap<String, User>();
+        this.bikes = new HashMap<String, Bike>();
         this.stations = new Station[numMaxStations];
         this.numstations = 0;
     }
@@ -66,27 +70,15 @@ public class MyBikeImpl implements MyBike{
 
     public void addBike(String model, double km, String idStation) throws StationNotFoundException {
         String id = RandomUtils.getId();
-        int posStation = -1;
+        Bike bike = new Bike(id,"Orbea",2);
+        int posStation = getPositionStation(this.stations,idStation);
 
-        for (int i = 0; i < this.numstations; i++) {
-            if (idStation.equals(this.stations[i].getId())) {
 
-                posStation = i;
+        this.stations[posStation].addBike(bike);
+        this.bikes.put(id, bike);
+        logger.info("Bici añadida al hashmap de bicis ");
 
-            }
-        }
 
-        if(posStation != -1){
-
-            this.stations[posStation].addBike(new Bike(id,"Orbea",2));
-
-        }
-        else{
-
-            logger.error("Estación " + idStation + " no encontrada");
-            throw new StationNotFoundException();
-
-        }
 
     }
 
@@ -94,8 +86,19 @@ public class MyBikeImpl implements MyBike{
         return null;
     }
 
-    public Bike getBike(String id) {
-        return null;
+    public Bike getBike(String idStation, String idUser, String idBike) throws StationNotFoundException, BikeNotFoundException {
+
+        Bike bike = bikes.get(idBike);
+
+        int posStation = getPositionStation(this.stations,idStation);
+        int posBike = getPositionBike(this.stations[posStation].getListBikes(),idBike);
+
+        this.stations[posStation].deleteBike(posBike);
+
+        //falta añadir la bici al usuario
+
+
+        return bike;
     }
 
     public List<Bike> bikesByUser(User user) {
@@ -110,5 +113,67 @@ public class MyBikeImpl implements MyBike{
         String id = this.stations[pos].getId();
         logger.info("id = " + id );
         return id;
+    }
+
+    public int getPositionStation(Station[] array, String idStation) throws StationNotFoundException {
+
+        int pos = -1;
+
+        for(Station station: array)
+        {
+            int i = 0;
+
+            if(station.getId() == idStation){
+                pos = i;
+            }
+            else{
+
+                i++;
+
+            }
+        }
+
+        if(pos != -1){
+            return pos;
+        }
+        else{
+
+            logger.error("Estación " + idStation + " no encontrada");
+            throw new StationNotFoundException();
+
+
+        }
+
+    }
+
+    public int getPositionBike(List<Bike> list, String idBike) throws BikeNotFoundException {
+
+        int pos = -1;
+
+        for(Bike bici : list){
+
+            int i = 0;
+
+            if (bici.getId() == idBike){
+
+                pos = i;
+
+            }else{
+
+                i++;
+
+            }
+        }
+
+        if(pos != -1){
+            return pos;
+        }
+        else{
+
+            logger.error("Bici " + idBike + " no encontrada");
+            throw new BikeNotFoundException();
+
+
+        }
     }
 }

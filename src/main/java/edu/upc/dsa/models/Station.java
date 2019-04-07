@@ -32,6 +32,15 @@ public class Station {
 
     }
 
+    public void deleteBike(int posBike){
+
+        this.listBikes.remove(posBike);
+        logger.info("Eliminada bici de la estación");
+    }
+
+
+
+
     public String getId() {
         return id;
     }
