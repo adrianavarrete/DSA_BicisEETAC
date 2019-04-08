@@ -17,7 +17,7 @@ public interface MyBike {
     public void addBike(String model, double km, String idStation) throws StationNotFoundException;
     public List<Bike> bikesByStationOrderByKms(List<Bike> listBikes);
     public Bike getBike(String idStation, String idUser, String idBike) throws StationNotFoundException, BikeNotFoundException;
-    public List<Bike> bikesByUser(User user);
+    public List<Bike> bikesByUser(String idUser);
 
 
     

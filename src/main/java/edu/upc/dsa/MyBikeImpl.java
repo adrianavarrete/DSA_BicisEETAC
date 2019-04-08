@@ -43,8 +43,8 @@ public class MyBikeImpl implements MyBike{
     public void addUser(String name, String surname, String email) {
 
         String id = RandomUtils.getId();
-        this.users.put("a", new User("a", name, surname,email));
-        logger.info("User: " + "a" +" añadido");
+        this.users.put(id, new User(id, name, surname,email));
+        logger.info("User: " + id +" añadido");
 
     }
 
@@ -107,8 +107,19 @@ public class MyBikeImpl implements MyBike{
         return null;
     }
 
-    public List<Bike> bikesByUser(User user) {
-        return null;
+
+    public List<Bike> bikesByUser(String idUser) {
+
+        return this.users.get(idUser).getListBikes();
+
+    }
+
+    public List<User> getUsers() {
+
+        List<User> listUsers = new LinkedList<>(this.users.values());
+
+        return listUsers;
+
     }
 
     public List<Bike> bikesByStation(String idStation) throws StationNotFoundException {
@@ -157,6 +168,25 @@ public class MyBikeImpl implements MyBike{
         }
 
 
+        return id;
+    }
+
+    public String getIdUser(int pos, List<User> list) {
+        String id = null;
+        int i = 0;
+
+
+        for(User user: list){
+
+            if(i != pos){
+                i++;
+            }else{
+                id = user.getId();
+                logger.info("id = " + id );
+                break;
+            }
+
+        }
         return id;
     }
 

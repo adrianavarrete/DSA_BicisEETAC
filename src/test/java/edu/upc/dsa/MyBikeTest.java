@@ -1,11 +1,15 @@
 package edu.upc.dsa;
 
 import edu.upc.dsa.models.Bike;
+import edu.upc.dsa.models.User;
 import edu.upc.dsa.throwable.BikeNotFoundException;
 import edu.upc.dsa.throwable.StationNotFoundException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 
 public class MyBikeTest {
@@ -49,12 +53,21 @@ public class MyBikeTest {
 
     @Test
     public void getBikeTest() throws BikeNotFoundException, StationNotFoundException {
+
+        List<User> listUsers = MyBikeImpl.getInstance().getUsers();
+
+
         String idStation = MyBikeImpl.getInstance().getIdStation(0);
-        String idUser = "a";
+        String idUser = MyBikeImpl.getInstance().getIdUser(0,listUsers);
         String idBike = MyBikeImpl.getInstance().getIdBike(0, idStation);
 
         Bike hola = MyBikeImpl.getInstance().getBike(idStation,idUser,idBike);
 
+    }
+
+    @Test
+    public void getUserTest(){
+        List<User> list = MyBikeImpl.getInstance().getUsers();
     }
 
 
