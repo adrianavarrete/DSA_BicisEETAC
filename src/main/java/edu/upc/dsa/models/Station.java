@@ -28,7 +28,7 @@ public class Station {
     public void addBike(Bike bike){
 
         this.listBikes.add(bike);
-        logger.info("Bici añadida en la stación " + this.id);
+        logger.info("Bici añadida en la estación " + this.id);
 
     }
 

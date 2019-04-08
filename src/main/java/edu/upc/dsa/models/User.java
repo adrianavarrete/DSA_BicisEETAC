@@ -1,6 +1,7 @@
 package edu.upc.dsa.models;
 
 import edu.upc.dsa.util.RandomUtils;
+import org.apache.log4j.Logger;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -12,6 +13,7 @@ public class User {
     String name;
     String surname;
     String email;
+    final static Logger logger = Logger.getLogger(User.class);
 
     public User(String id, String name, String surname, String email) {
         this.id = id;
@@ -19,6 +21,12 @@ public class User {
         this.name = name;
         this.surname = surname;
         this.email = email;
+    }
+
+    public void addBike(Bike bike){
+        this.listBikes.add(bike);
+        logger.info("Bici con id " + bike.getId() + "añadida al User " + this.getId());
+
     }
 
     public String getId() {

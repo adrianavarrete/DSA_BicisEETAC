@@ -1,12 +1,14 @@
 package edu.upc.dsa.models;
 
 import edu.upc.dsa.util.RandomUtils;
+import org.apache.log4j.Logger;
 
 public class Bike {
 
     String id;
     String model;
     double km;
+
 
     public Bike(String id, String model, double km) {
         this.id = id;

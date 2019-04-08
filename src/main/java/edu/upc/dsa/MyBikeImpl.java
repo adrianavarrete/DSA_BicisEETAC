@@ -5,12 +5,14 @@ import edu.upc.dsa.models.Station;
 import edu.upc.dsa.models.User;
 import edu.upc.dsa.throwable.BikeNotFoundException;
 import edu.upc.dsa.throwable.StationNotFoundException;
+import edu.upc.dsa.throwable.UserNotFoundException;
 import edu.upc.dsa.util.RandomUtils;
 import org.apache.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.*;
+
 
 public class MyBikeImpl implements MyBike{
 
@@ -41,8 +43,8 @@ public class MyBikeImpl implements MyBike{
     public void addUser(String name, String surname, String email) {
 
         String id = RandomUtils.getId();
-        this.users.put(id, new User(id, name, surname,email));
-        logger.info("User: " + id +" añadido");
+        this.users.put("a", new User("a", name, surname,email));
+        logger.info("User: " + "a" +" añadido");
 
     }
 
@@ -70,7 +72,7 @@ public class MyBikeImpl implements MyBike{
 
     public void addBike(String model, double km, String idStation) throws StationNotFoundException {
         String id = RandomUtils.getId();
-        Bike bike = new Bike(id,"Orbea",2);
+        Bike bike = new Bike(id,model,km);
         int posStation = getPositionStation(this.stations,idStation);
 
 
@@ -88,6 +90,8 @@ public class MyBikeImpl implements MyBike{
 
     public Bike getBike(String idStation, String idUser, String idBike) throws StationNotFoundException, BikeNotFoundException {
 
+
+
         Bike bike = bikes.get(idBike);
 
         int posStation = getPositionStation(this.stations,idStation);
@@ -97,12 +101,28 @@ public class MyBikeImpl implements MyBike{
 
         //falta añadir la bici al usuario
 
+        this.users.get(idUser).addBike(bike);
 
-        return bike;
+
+        return null;
     }
 
     public List<Bike> bikesByUser(User user) {
         return null;
+    }
+
+    public List<Bike> bikesByStation(String idStation) throws StationNotFoundException {
+
+        int posStation = this.getPositionStation(this.stations,idStation);
+
+        return this.stations[posStation].getListBikes();
+
+
+    }
+
+    public Station[] getStations(){
+
+        return this.stations;
     }
 
     public int getNumstations() {
@@ -112,6 +132,31 @@ public class MyBikeImpl implements MyBike{
     public String getIdStation(int pos){
         String id = this.stations[pos].getId();
         logger.info("id = " + id );
+        return id;
+    }
+
+
+
+    public String getIdBike(int pos, String idStation) throws StationNotFoundException {
+        String id = null;
+        int posStation = this.getPositionStation(this.stations,idStation);
+        int i = 0;
+
+        List<Bike> listBikes = this.stations[posStation].getListBikes();
+
+        for(Bike bike: listBikes){
+
+            if(i != pos){
+                i++;
+            }else{
+                id = bike.getId();
+                logger.info("id = " + id );
+                break;
+            }
+
+        }
+
+
         return id;
     }
 
@@ -125,6 +170,8 @@ public class MyBikeImpl implements MyBike{
 
             if(station.getId() == idStation){
                 pos = i;
+                break;
+
             }
             else{
 
@@ -157,6 +204,7 @@ public class MyBikeImpl implements MyBike{
             if (bici.getId() == idBike){
 
                 pos = i;
+                break;
 
             }else{
 
@@ -172,6 +220,38 @@ public class MyBikeImpl implements MyBike{
 
             logger.error("Bici " + idBike + " no encontrada");
             throw new BikeNotFoundException();
+
+
+        }
+    }
+
+    public int getPositionUser(List<User> list, String idUser) throws UserNotFoundException {
+
+        int pos = -1;
+
+        for(User user : list){
+
+            int i = 0;
+
+            if (user.getId() == idUser){
+
+                pos = i;
+                break;
+
+            }else{
+
+                i++;
+
+            }
+        }
+
+        if(pos != -1){
+            return pos;
+        }
+        else{
+
+            logger.error("User " + idUser + " no encontrado");
+            throw new UserNotFoundException();
 
 
         }
