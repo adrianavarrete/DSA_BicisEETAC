@@ -4,6 +4,7 @@ import edu.upc.dsa.models.Bike;
 import edu.upc.dsa.models.Station;
 import edu.upc.dsa.models.User;
 import edu.upc.dsa.throwable.BikeNotFoundException;
+import edu.upc.dsa.throwable.NumStationsFullException;
 import edu.upc.dsa.throwable.StationNotFoundException;
 import edu.upc.dsa.throwable.UserNotFoundException;
 import edu.upc.dsa.util.RandomUtils;
@@ -48,7 +49,7 @@ public class MyBikeImpl implements MyBike{
 
     }
 
-    public void addStation(String name, double lat, double lon, String description) {
+    public void addStation(String name, double lat, double lon, String description) throws NumStationsFullException {
 
         String id = RandomUtils.getId();
 
@@ -65,6 +66,7 @@ public class MyBikeImpl implements MyBike{
         else{
 
             logger.info("Ya se han añadido todas las estaciones posibles");
+            throw new NumStationsFullException();
 
         }
 
@@ -103,14 +105,55 @@ public class MyBikeImpl implements MyBike{
 
         this.users.get(idUser).addBike(bike);
 
+        return bike;
 
-        return null;
+
     }
 
 
-    public List<Bike> bikesByUser(String idUser) {
+    public List<Bike> bikesByUser(String idUser) throws UserNotFoundException {
 
-        return this.users.get(idUser).getListBikes();
+        if(checkUser(idUser) != true){
+
+            logger.error("Usuario no encontrado");
+            throw new UserNotFoundException();
+        }else{
+
+            return users.get(idUser).getListBikes();
+
+        }
+
+
+
+    }
+
+    public boolean checkUser(String idUser){
+        boolean check = false;
+
+        List<User> listUsers = new LinkedList<>(this.users.values());
+
+        for(User user : listUsers){
+            if(user.getId() == idUser){
+                check = true;
+                break;
+            }
+
+        }
+
+        return check;
+
+
+
+
+    }
+
+    @Override
+    public void clear() {
+        this.users.clear();
+        this.bikes.clear();
+        this.stations = new Station[numMaxStations];
+        this.numstations = 0;
+
 
     }
 
